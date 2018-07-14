@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>
+  <span *ngIf="!data.id; else elseBlock">Adicionar</span> Produto
+</h1>
+<ng-template #elseBlock>Editar</ng-template>
+<div class="dialog-container">
+  
+  <input [(ngModel)]="data.id" type="hidden" required *ngIf="data.id">
+  
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.nome" placeholder="Nome" type="text"  required>
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea matInput [(ngModel)]="data.descricao" placeholder="Descrição"  required></textarea>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.preco" placeholder="Preço" type="number" required>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.qtde" placeholder="Quantidade" type="number" required>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="">Cancelar</button>
+  <button mat-raised-button (click)="saveProduto(data)" color="primary">Salvar</button>
+</div>

@@ -12,12 +12,13 @@ import {MatSelectModule} from '@angular/material/select';
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
-
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProdutosComponent } from './produtos/produtos.component';
 import { ProdutosAddDialogComponent } from './produtos-add-dialog/produtos-add-dialog.component';
+import { ProdutosService} from './produtos.service';
 
 @NgModule({
   declarations: [
@@ -39,12 +40,13 @@ import { ProdutosAddDialogComponent } from './produtos-add-dialog/produtos-add-d
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule
   ],
   entryComponents: [
     ProdutosAddDialogComponent
   ],
-  providers: [],
+  providers: [ProdutosService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

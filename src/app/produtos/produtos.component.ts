@@ -4,6 +4,7 @@ import {MatPaginator,
   MatDialog} from '@angular/material';
 
 import {ProdutosAddDialogComponent} from  '../produtos-add-dialog/produtos-add-dialog.component';
+import { ProdutosService } from '../produtos.service';
 
 @Component({
   selector: 'app-produtos',
@@ -13,28 +14,24 @@ import {ProdutosAddDialogComponent} from  '../produtos-add-dialog/produtos-add-d
 export class ProdutosComponent implements OnInit {
   title = 'Produtos';
 
-  constructor(public dialog:MatDialog) { }
+  constructor(public dialog:MatDialog, private produtosService: ProdutosService) { }
   // Colunas Visíveis da tabela de produtos
   displayedColumns: string[] = ['id', 'nome', 'descricao', 'preco', 'qtde', 'acoes'];
-  dataSource = new MatTableDataSource<Produto>(PRODUCT_DATA);
   
-  produtos = [
-    {id: 1,    nome: 'Hydrogen',  descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-    {id: 2,    nome: 'Helium',    descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-    {id: 3,    nome: 'Lithium',   descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-    {id: 4,    nome: 'Beryllium', descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-    {id: 5,    nome: 'Boron',     descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-    {id: 6,    nome: 'Carbon',    descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-    {id: 7,    nome: 'Nitrogen',  descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-    {id: 8,    nome: 'Oxygen',    descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-    {id: 9,    nome: 'Fluorine',  descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-    {id: 10,   nome:  'Neon',     descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2}
-  ];
+  // Dados para a tabela
+  produtosTable = new MatTableDataSource<any>([this.listar()]);
+  
+  produtos : Array<any>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
-    this.dataSource.paginator = this.paginator;
+    // Esse trecho chama o metodo listar() e página os dados na tabela
+    this.produtosTable.paginator = this.paginator;
+  }
+
+  listar(){
+    this.produtosService.listar().subscribe(dados => this.produtos = dados)
   }
 
   openDialog(params){
@@ -46,36 +43,14 @@ export class ProdutosComponent implements OnInit {
       data: params
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-     // console.log(result);
-      // this.dataSource = result;
+    dialogRef.afterClosed().subscribe(produto => {
+      this.produtosTable.data = [this.listar()];
     })
   }
 
-  confirmDelete(produto: Produto){
+  confirmDelete(produto: any){
     if(confirm("Vocé deseja deletar o item "+produto.nome+"?")) {
       console.log(produto);
     }
   }
 }
-
-export interface Produto {
-  id: number;
-  nome: string;
-  descricao: string;
-  preco: number;
-  qtde: number;
-}
-
-export const PRODUCT_DATA: Produto[] = [
-  {id: 1,    nome: 'Hydrogen',  descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-  {id: 2,    nome: 'Helium',    descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-  {id: 3,    nome: 'Lithium',   descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-  {id: 4,    nome: 'Beryllium', descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-  {id: 5,    nome: 'Boron',     descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-  {id: 6,    nome: 'Carbon',    descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-  {id: 7,    nome: 'Nitrogen',  descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-  {id: 8,    nome: 'Oxygen',    descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-  {id: 9,    nome: 'Fluorine',  descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-  {id: 10,   nome:  'Neon',     descricao: "É um produto que existe na natureza", preco: 11.99, qtde: 2},
-];
